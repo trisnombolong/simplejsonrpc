@@ -3,8 +3,6 @@ package test;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.simplejsonrpc.HideFromJsonRPC;
-
 
 public class SomeClass {
 
@@ -33,7 +31,6 @@ public class SomeClass {
 			return "Context is " + context + dontService();
 	}
 	
-	@HideFromJsonRPC
 	private String dontService() {
 		return "loift";
 	}
