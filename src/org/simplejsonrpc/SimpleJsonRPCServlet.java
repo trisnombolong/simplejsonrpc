@@ -209,6 +209,7 @@ public class SimpleJsonRPCServlet extends HttpServlet {
 			}
 		} catch (JsonMappingException e) {
 			mapper.writeValue(response.getOutputStream(), new JsonRPCErrorResponse(-32600, "Invalid Request.", null, null));
+			return;
 		}
 
 		List<Object> responses = new LinkedList<Object>();

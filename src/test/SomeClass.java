@@ -35,4 +35,8 @@ public class SomeClass {
 		return "loift";
 	}
 	
+	public void notified() {
+		System.out.println("Klappt!");
+	}
+	
 }

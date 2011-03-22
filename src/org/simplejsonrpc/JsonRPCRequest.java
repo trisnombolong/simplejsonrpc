@@ -5,8 +5,8 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
-@JsonPropertyOrder({"jsonrpc", "method", "params", "id"})
-@JsonIgnoreProperties({"notification"})
+@JsonPropertyOrder({ "jsonrpc", "method", "params", "id" })
+@JsonIgnoreProperties({ "notification" })
 public class JsonRPCRequest {
 
 	private String jsonrpc = "2.0";
@@ -14,10 +14,6 @@ public class JsonRPCRequest {
 	private List<Object> params;
 	private Object id;
 	private boolean notification;
-	
-	public String getJsonrpc() {
-		return jsonrpc;
-	}
 
 	public void setMethod(String method) {
 		this.method = method;
@@ -46,9 +42,17 @@ public class JsonRPCRequest {
 	public void setNotification(boolean notification) {
 		this.notification = notification;
 	}
-	
+
 	public boolean isNotification() {
 		return notification;
+	}
+
+	public void setJsonrpc(String jsonrpc) {
+		this.jsonrpc = jsonrpc;
+	}
+
+	public String getJsonrpc() {
+		return jsonrpc;
 	}
 
 }
