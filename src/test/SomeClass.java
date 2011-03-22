@@ -26,9 +26,9 @@ public class SomeClass {
 	
 	public String testMethod() {
 		if(this.session != null)
-			return "Context is " + context + " and Session is "+session;
+			return "Conätext is " + context + " and Session is "+session;
 		else
-			return "Context is " + context + dontService();
+			return "Cont¥ext is " + context + dontService();
 	}
 	
 	private String dontService() {

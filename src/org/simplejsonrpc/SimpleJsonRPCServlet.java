@@ -158,6 +158,12 @@ public class SimpleJsonRPCServlet extends HttpServlet {
 		return serviceObject;
 	}
 
+	private JsonRPCRequest mapRequestNode(JsonNode node) throws JsonParseException, JsonMappingException, IOException {
+		JsonRPCRequest request = mapper.readValue(node, JsonRPCRequest.class);
+		request.setNotification(!node.has("id"));
+		return request;
+	}
+
 	/**
 	 * <p>
 	 * Fetches the JSON-RPC Request from POST Data and executes the appropriate
@@ -196,10 +202,10 @@ public class SimpleJsonRPCServlet extends HttpServlet {
 		try {
 			if (rootNode.isArray()) {
 				for (Iterator<JsonNode> nodes = rootNode.getElements(); nodes.hasNext();) {
-					requests.add(mapper.readValue(nodes.next(), JsonRPCRequest.class));
+					requests.add(this.mapRequestNode(nodes.next()));
 				}
 			} else {
-				requests.add(mapper.readValue(rootNode, JsonRPCRequest.class));
+				requests.add(this.mapRequestNode(rootNode));
 			}
 		} catch (JsonMappingException e) {
 			mapper.writeValue(response.getOutputStream(), new JsonRPCErrorResponse(-32600, "Invalid Request.", null, null));
@@ -257,20 +263,23 @@ public class SimpleJsonRPCServlet extends HttpServlet {
 				error.getError().setCode(-32099);
 				jsonResponse = error;
 			}
-			responses.add(jsonResponse);
+			if (!jsonRequest.isNotification())
+				responses.add(jsonResponse);
 		}
-		OutputStream out = null;
-		if (StringUtils.contains(request.getHeader("Accept-Encoding"), "gzip")) {
-			out = new GZIPOutputStream(response.getOutputStream());
-			response.setHeader("Content-Encoding", "gzip");
-		} else {
-			out = response.getOutputStream();
+		if (!responses.isEmpty()) {
+			OutputStream out = null;
+			if (StringUtils.contains(request.getHeader("Accept-Encoding"), "gzip")) {
+				out = new GZIPOutputStream(response.getOutputStream());
+				response.setHeader("Content-Encoding", "gzip");
+			} else {
+				out = response.getOutputStream();
+			}
+			if (!rootNode.isArray()) {
+				mapper.writeValue(out, responses.get(0));
+			} else {
+				mapper.writeValue(out, responses);
+			}
+			out.close();
 		}
-		if (!rootNode.isArray()) {
-			mapper.writeValue(out, responses.get(0));
-		} else {
-			mapper.writeValue(out, responses);
-		}
-		out.close();
 	}
 }
