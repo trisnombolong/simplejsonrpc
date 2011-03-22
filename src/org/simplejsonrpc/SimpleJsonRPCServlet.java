@@ -236,7 +236,13 @@ public class SimpleJsonRPCServlet extends HttpServlet {
 			Object result = null;
 			JsonRPCResponse jsonResponse = null;
 			try {
-				result = MethodUtils.invokeMethod(serviceObject, jsonRequest.getMethod(), jsonRequest.getParams().toArray());
+				Object [] params;
+				if(jsonRequest.getParams() == null) {
+					params = new Object[0];
+				} else {
+					params = jsonRequest.getParams().toArray();
+				}
+				result = MethodUtils.invokeMethod(serviceObject, jsonRequest.getMethod(), params);
 				jsonResponse = new JsonRPCResultResponse(result, jsonRequest.getId());
 			} catch (NoSuchMethodException e) {
 				JsonRPCErrorResponse error = new JsonRPCErrorResponse();
