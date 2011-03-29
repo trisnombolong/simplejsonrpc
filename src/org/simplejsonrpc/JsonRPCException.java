@@ -8,6 +8,7 @@ public class JsonRPCException extends Exception {
 	private final JsonRPCErrorObject errorObject;
 	
 	public JsonRPCException(int code, String message, Object data) {
+		super(message);
 		errorObject = new JsonRPCErrorObject(code, message, data);
 	}
 	
