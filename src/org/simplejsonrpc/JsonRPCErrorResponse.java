@@ -21,6 +21,7 @@ public class JsonRPCErrorResponse extends JsonRPCResponse{
 
 	public JsonRPCErrorResponse(JsonRPCErrorObject error, Object id) {
 		this.error = error;
+		this.setId(id);
 	}
 
 	public void setError(JsonRPCErrorObject error) {
